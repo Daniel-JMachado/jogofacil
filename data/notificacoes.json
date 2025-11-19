@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "Novo jogador quer participar do seu jogo!",
+    "dados": {
+      "jogo_id": 1,
+      "inscricao_id": 1
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 19:07:32"
+  }
+]

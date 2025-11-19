@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "login": "Seninha",
+    "senha": "1234",
+    "telefone": "351234-5689",
+    "nome": "Daniel Machado",
+    "apelido_jogador": "seninha",
+    "foto": "user_1.jpeg"
+  }
+]

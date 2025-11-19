@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "organizador_id": 1,
+    "campo_id": 1,
+    "data": "2025-11-27",
+    "hora_inicio": "13:30",
+    "hora_fim": "15:00",
+    "valor": 15.0,
+    "vagas_total": 10,
+    "vagas_ocupadas": 0,
+    "status": "ativo"
+  }
+]
