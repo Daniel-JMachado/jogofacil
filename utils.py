@@ -225,6 +225,39 @@ def listar_jogos_por_organizador(organizador_id: int) -> List[Dict]:
     return [j for j in jogos if j.get('organizador_id') == organizador_id]
 
 
+def excluir_jogo(jogo_id: int) -> bool:
+    """Exclui um jogo e notifica todos os inscritos"""
+    jogo = buscar_jogo_por_id(jogo_id)
+    if not jogo:
+        return False
+    
+    # Busca todas as inscrições do jogo
+    inscricoes = listar_inscricoes_por_jogo(jogo_id)
+    
+    # Notifica todos os jogadores inscritos (pendentes e aprovados)
+    campo = buscar_campo_por_id(jogo['campo_id'])
+    data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+    
+    for insc in inscricoes:
+        if insc['status'] in ['pendente', 'aprovada']:
+            criar_notificacao(
+                usuario_id=insc['jogador_id'],
+                tipo='jogo_cancelado',
+                mensagem=f"O jogo em {campo['nome']} no dia {data_formatada} às {jogo['hora_inicio']} foi cancelado pelo organizador.",
+                dados={'jogo_id': jogo_id}
+            )
+    
+    # Remove todas as inscrições do jogo
+    todas_inscricoes = carregar_inscricoes()
+    inscricoes_filtradas = [i for i in todas_inscricoes if i.get('jogo_id') != jogo_id]
+    salvar_inscricoes(inscricoes_filtradas)
+    
+    # Remove o jogo
+    jogos = carregar_jogos()
+    jogos_filtrados = [j for j in jogos if j.get('id') != jogo_id]
+    return salvar_jogos(jogos_filtrados)
+
+
 def listar_jogos_futuros(data_inicial: Optional[str] = None) -> List[Dict]:
     """Lista jogos futuros a partir de uma data"""
     jogos = carregar_jogos()
@@ -278,10 +311,15 @@ def criar_inscricao(jogo_id: int, jogador_id: int) -> Optional[Dict]:
     # Cria notificação para o organizador
     jogo = buscar_jogo_por_id(jogo_id)
     if jogo:
+        jogador = buscar_usuario_por_id(jogador_id)
+        campo = buscar_campo_por_id(jogo['campo_id'])
+        nome_jogador = jogador.get('apelido_jogador') or jogador.get('nome') or jogador.get('login')
+        data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+        
         criar_notificacao(
             usuario_id=jogo['organizador_id'],
             tipo='nova_inscricao',
-            mensagem=f'Novo jogador quer participar do seu jogo!',
+            mensagem=f'{nome_jogador} quer participar do seu jogo em {campo["nome"]} no dia {data_formatada} às {jogo["hora_inicio"]}.',
             dados={'jogo_id': jogo_id, 'inscricao_id': novo_id}
         )
     
@@ -318,20 +356,30 @@ def atualizar_status_inscricao(inscricao_id: int, novo_status: str) -> bool:
                 atualizar_vagas_jogo(insc['jogo_id'], 1)
                 
                 # Notifica jogador
-                criar_notificacao(
-                    usuario_id=insc['jogador_id'],
-                    tipo='inscricao_aprovada',
-                    mensagem=f'Sua inscrição foi aprovada!',
-                    dados={'jogo_id': insc['jogo_id']}
-                )
+                jogo = buscar_jogo_por_id(insc['jogo_id'])
+                if jogo:
+                    campo = buscar_campo_por_id(jogo['campo_id'])
+                    data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+                    
+                    criar_notificacao(
+                        usuario_id=insc['jogador_id'],
+                        tipo='inscricao_aprovada',
+                        mensagem=f'Sua inscrição foi aprovada! Jogo em {campo["nome"]} no dia {data_formatada} às {jogo["hora_inicio"]}.',
+                        dados={'jogo_id': insc['jogo_id']}
+                    )
             elif novo_status == 'reprovada':
                 # Notifica jogador
-                criar_notificacao(
-                    usuario_id=insc['jogador_id'],
-                    tipo='inscricao_reprovada',
-                    mensagem=f'Sua inscrição foi recusada.',
-                    dados={'jogo_id': insc['jogo_id']}
-                )
+                jogo = buscar_jogo_por_id(insc['jogo_id'])
+                if jogo:
+                    campo = buscar_campo_por_id(jogo['campo_id'])
+                    data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+                    
+                    criar_notificacao(
+                        usuario_id=insc['jogador_id'],
+                        tipo='inscricao_reprovada',
+                        mensagem=f'Sua inscrição foi recusada para o jogo em {campo["nome"]} no dia {data_formatada} às {jogo["hora_inicio"]}.',
+                        dados={'jogo_id': insc['jogo_id']}
+                    )
             elif novo_status == 'cancelada':
                 # Se estava aprovada, libera vaga
                 if insc.get('status') == 'aprovada':
@@ -340,10 +388,14 @@ def atualizar_status_inscricao(inscricao_id: int, novo_status: str) -> bool:
                 # Notifica organizador
                 jogo = buscar_jogo_por_id(insc['jogo_id'])
                 if jogo:
+                    jogador = buscar_usuario_por_id(insc['jogador_id'])
+                    nome_jogador = jogador.get('apelido_jogador') or jogador.get('nome') or jogador.get('login')
+                    data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+                    
                     criar_notificacao(
                         usuario_id=jogo['organizador_id'],
                         tipo='inscricao_cancelada',
-                        mensagem=f'Um jogador cancelou a inscrição.',
+                        mensagem=f'{nome_jogador} cancelou a inscrição no jogo que você organizou em {data_formatada} às {jogo["hora_inicio"]}.',
                         dados={'jogo_id': insc['jogo_id']}
                     )
             
@@ -362,12 +414,17 @@ def remover_jogador_inscricao(inscricao_id: int) -> bool:
             atualizar_vagas_jogo(insc['jogo_id'], -1)
             
             # Notifica jogador removido
-            criar_notificacao(
-                usuario_id=insc['jogador_id'],
-                tipo='removido_jogo',
-                mensagem=f'Você foi removido de um jogo pelo organizador.',
-                dados={'jogo_id': insc['jogo_id']}
-            )
+            jogo = buscar_jogo_por_id(insc['jogo_id'])
+            if jogo:
+                campo = buscar_campo_por_id(jogo['campo_id'])
+                data_formatada = datetime.strptime(jogo['data'], "%Y-%m-%d").strftime("%d/%m/%Y")
+                
+                criar_notificacao(
+                    usuario_id=insc['jogador_id'],
+                    tipo='removido_jogo',
+                    mensagem=f'Você foi removido do jogo em {campo["nome"]} no dia {data_formatada} às {jogo["hora_inicio"]} pelo organizador.',
+                    dados={'jogo_id': insc['jogo_id']}
+                )
             
             # Remove a inscrição
             inscricoes.pop(i)

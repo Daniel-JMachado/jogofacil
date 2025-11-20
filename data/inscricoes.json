@@ -1,9 +1,16 @@
 [
   {
-    "id": 1,
-    "jogo_id": 1,
-    "jogador_id": 1,
-    "status": "pendente",
-    "data_inscricao": "2025-11-19 19:07:32"
+    "id": 3,
+    "jogo_id": 3,
+    "jogador_id": 3,
+    "status": "reprovada",
+    "data_inscricao": "2025-11-19 21:40:40"
+  },
+  {
+    "id": 4,
+    "jogo_id": 3,
+    "jogador_id": 2,
+    "status": "aprovada",
+    "data_inscricao": "2025-11-19 21:45:15"
   }
 ]

@@ -10,5 +10,39 @@
     },
     "lida": true,
     "data_criacao": "2025-11-19 19:07:32"
+  },
+  {
+    "id": 2,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dandan quer participar do seu jogo em Arena Park Descoberto no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 3,
+      "inscricao_id": 4
+    },
+    "lida": false,
+    "data_criacao": "2025-11-19 21:45:15"
+  },
+  {
+    "id": 3,
+    "usuario_id": 2,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Arena Park Descoberto no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 3
+    },
+    "lida": false,
+    "data_criacao": "2025-11-19 21:45:39"
+  },
+  {
+    "id": 4,
+    "usuario_id": 1,
+    "tipo": "jogo_cancelado",
+    "mensagem": "O jogo em Arena Park Descoberto no dia 27/11/2025 às 13:30 foi cancelado pelo organizador.",
+    "dados": {
+      "jogo_id": 1
+    },
+    "lida": false,
+    "data_criacao": "2025-11-19 21:46:39"
   }
 ]

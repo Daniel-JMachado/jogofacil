@@ -2,46 +2,46 @@
   {
     "id": 1,
     "nome": "Arena Park Descoberto",
-    "endereco": "Rua das Flores, 123",
-    "tipo": "descoberto",
-    "dimensoes": "40x20m",
-    "formato": "5x5",
-    "jogadores_por_time": 5
-  },
-  {
-    "id": 2,
-    "nome": "Arena Park Coberto",
-    "endereco": "Rua das Flores, 123",
-    "tipo": "coberto",
-    "dimensoes": "40x20m",
-    "formato": "5x5",
-    "jogadores_por_time": 5
-  },
-  {
-    "id": 3,
-    "nome": "Smart",
-    "endereco": "Av. Principal, 456",
-    "tipo": "coberto",
-    "dimensoes": "35x18m",
-    "formato": "4x4",
-    "jogadores_por_time": 4
-  },
-  {
-    "id": 4,
-    "nome": "Brazuca",
-    "endereco": "Rua do Futebol, 789",
+    "endereco": "Parque da cidade, s/n",
     "tipo": "descoberto",
     "dimensoes": "45x25m",
     "formato": "6x6",
     "jogadores_por_time": 6
   },
   {
-    "id": 5,
-    "nome": "Arena M10",
-    "endereco": "Av. dos Esportes, 1010",
+    "id": 2,
+    "nome": "Arena Park Coberto",
+    "endereco": "Parque da cidade, s/n",
     "tipo": "coberto",
+    "dimensoes": "45x25m",
+    "formato": "6x6",
+    "jogadores_por_time": 6
+  },
+  {
+    "id": 3,
+    "nome": "Arena Smart",
+    "endereco": "Smart Avenue, 456",
+    "tipo": "descoberto",
+    "dimensoes": "50x25m",
+    "formato": "6x6",
+    "jogadores_por_time": 6
+  },
+  {
+    "id": 4,
+    "nome": "Brazuca",
+    "endereco": "Boa vista, 789",
+    "tipo": "descoberto",
     "dimensoes": "40x20m",
     "formato": "5x5",
     "jogadores_por_time": 5
+  },
+  {
+    "id": 5,
+    "nome": "Arena M10",
+    "endereco": "Avenida, 1010",
+    "tipo": "descoberto",
+    "dimensoes": "35x20m",
+    "formato": "4x4",
+    "jogadores_por_time": 4
   }
 ]

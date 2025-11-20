@@ -18,7 +18,7 @@ from utils import (
     carregar_campos, buscar_campo_por_id,
     # Jogos
     carregar_jogos, criar_jogo, buscar_jogo_por_id, listar_jogos_por_organizador,
-    listar_jogos_futuros, verificar_conflito_horario,
+    listar_jogos_futuros, verificar_conflito_horario, excluir_jogo,
     # Inscrições
     criar_inscricao, listar_inscricoes_por_jogo, listar_inscricoes_por_jogador,
     atualizar_status_inscricao, remover_jogador_inscricao,
@@ -93,6 +93,15 @@ def logout():
     st.rerun()
 
 
+def gerar_horarios_30min():
+    """Gera lista de horários de 30 em 30 minutos"""
+    horarios = []
+    for hora in range(24):
+        horarios.append(f"{hora:02d}:00")
+        horarios.append(f"{hora:02d}:30")
+    return horarios
+
+
 # ============= TELA DE LOGIN E CADASTRO =============
 
 def tela_login():
@@ -109,7 +118,7 @@ def tela_login():
         st.write("### Faça login")
         
         with st.form("form_login"):
-            login = st.text_input("Nome/Email/Apelido")
+            login = st.text_input("Nome ou Apelido")
             senha = st.text_input("Senha (4 dígitos)", type="password", max_chars=4)
             
             submit = st.form_submit_button("Entrar", use_container_width=True)
@@ -135,7 +144,7 @@ def tela_login():
         st.write("### Criar nova conta")
         
         with st.form("form_cadastro"):
-            novo_login = st.text_input("Nome/Email/Apelido")
+            novo_login = st.text_input("Nome ou Apelido")
             novo_telefone = st.text_input("Telefone", placeholder="Ex: 11 98765-4321")
             nova_senha = st.text_input("Senha (4 dígitos)", type="password", max_chars=4)
             confirma_senha = st.text_input("Confirme a senha", type="password", max_chars=4)
@@ -150,13 +159,16 @@ def tela_login():
                 elif nova_senha != confirma_senha:
                     st.error("As senhas não coincidem!")
                 else:
+                    # Verifica se telefone já existe
+                    if buscar_usuario_por_telefone(novo_telefone):
+                        st.error("Este telefone já está cadastrado!")
                     # Verifica se login já existe
-                    if buscar_usuario_por_login(novo_login):
-                        st.error("Este login já está em uso!")
+                    elif buscar_usuario_por_login(novo_login):
+                        st.error("Este nome/apelido já está em uso!")
                     else:
                         # Cria usuário
                         usuario = criar_usuario(novo_login, nova_senha, novo_telefone)
-                        st.success("Cadastro realizado com sucesso! Faça login.")
+                        st.success("Cadastro realizado com sucesso! volte a tela de login e Faça seu login.")
     
     # === TAB RECUPERAR SENHA ===
     with tab_recuperar:
@@ -172,42 +184,44 @@ def mostrar_sidebar():
     usuario = st.session_state.usuario_logado
     
     with st.sidebar:
-        st.title("⚽ Menu")
-        
-        # Foto e nome do usuário
+                
+        # Foto e nome do usuário (centralizado)
         foto = carregar_foto_perfil(usuario.get('foto', ''))
         if foto:
-            st.image(foto, width=150)
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                st.image(foto, width=100)
         
-        st.write(f"**{usuario.get('nome') or usuario.get('login')}**")
+        # Nome centralizado
+        st.markdown(f"<h4 style='text-align: center;'>{usuario.get('apelido_jogador') or usuario.get('login')}</h4>", unsafe_allow_html=True)
         
         # Notificações
         num_notificacoes = contar_notificacoes_nao_lidas(usuario['id'])
         if num_notificacoes > 0:
-            st.warning(f"🔔 {num_notificacoes} notificação(ões) nova(s)")
+            st.warning(f"{num_notificacoes} Você tem notificação nova!")
         
         st.divider()
         
         # Menu
-        if st.button("👤 Perfil", use_container_width=True):
+        if st.button("Perfil", use_container_width=True):
             st.session_state.pagina_atual = 'perfil'
             st.rerun()
         
-        if st.button("📋 Organizador", use_container_width=True):
+        if st.button("Organizar", use_container_width=True):
             st.session_state.pagina_atual = 'organizador'
             st.rerun()
         
-        if st.button("⚽ Jogador", use_container_width=True):
+        if st.button("Jogar", use_container_width=True):
             st.session_state.pagina_atual = 'jogador'
             st.rerun()
         
-        if st.button("🔔 Notificações", use_container_width=True):
+        if st.button("Notificações", use_container_width=True):
             st.session_state.pagina_atual = 'notificacoes'
             st.rerun()
         
         st.divider()
         
-        if st.button("🚪 Sair", use_container_width=True):
+        if st.button("Sair", use_container_width=True):
             logout()
 
 
@@ -218,12 +232,11 @@ def pagina_perfil():
     
     usuario = st.session_state.usuario_logado
     
-    st.title("👤 Meu Perfil")
+    st.title("Meu Perfil")
     
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.subheader("Foto de Perfil")
         
         foto = carregar_foto_perfil(usuario.get('foto', ''))
         if foto:
@@ -255,6 +268,13 @@ def pagina_perfil():
             submit = st.form_submit_button("Salvar Alterações", use_container_width=True)
             
             if submit:
+                # Verifica se telefone mudou e se já está em uso
+                if telefone != usuario.get('telefone', ''):
+                    usuario_existente = buscar_usuario_por_telefone(telefone)
+                    if usuario_existente and usuario_existente['id'] != usuario['id']:
+                        st.error("Este telefone já está cadastrado por outro usuário!")
+                        return
+                
                 dados_atualizados = {
                     'nome': nome,
                     'apelido_jogador': apelido,
@@ -287,37 +307,42 @@ def pagina_organizador():
         
         campos = carregar_campos()
         
+        # Select box de campos FORA do form para atualizar dinamicamente
+        opcoes_campos = {f"{c['nome']} - {c['formato']} ({c['tipo']})": c['id'] for c in campos}
+        campo_selecionado = st.selectbox("Campo", options=list(opcoes_campos.keys()))
+        campo_id = opcoes_campos[campo_selecionado]
+        
+        # Mostra info do campo selecionado
+        campo_info = buscar_campo_por_id(campo_id)
+        st.info(f"📍 {campo_info['endereco']} | {campo_info['dimensoes']} | {campo_info['jogadores_por_time']} jogadores por time")
+        
         with st.form("form_criar_jogo"):
-            # Select box de campos
-            opcoes_campos = {f"{c['nome']} - {c['formato']} ({c['tipo']})": c['id'] for c in campos}
-            campo_selecionado = st.selectbox("Campo", options=list(opcoes_campos.keys()))
-            campo_id = opcoes_campos[campo_selecionado]
-            
-            # Mostra info do campo
-            campo_info = buscar_campo_por_id(campo_id)
-            st.info(f"📍 {campo_info['endereco']} | {campo_info['dimensoes']} | {campo_info['jogadores_por_time']} jogadores por time")
             
             col1, col2 = st.columns(2)
             
             with col1:
                 data_jogo = st.date_input("Data do Jogo", min_value=date.today())
-                hora_inicio = st.time_input("Horário de Início")
+                horarios = gerar_horarios_30min()
+                hora_inicio = st.selectbox("Horário de Início", horarios, index=20)  # Default 10:00
             
             with col2:
-                hora_fim = st.time_input("Horário de Término")
                 valor = st.number_input("Valor por Pessoa (R$)", min_value=0.0, step=5.0)
+                hora_fim = st.selectbox("Horário de Término", horarios, index=23)  # Default 11:30
             
-            vagas = st.number_input("Número de Vagas", min_value=1, max_value=campo_info['jogadores_por_time']*2, value=campo_info['jogadores_por_time']*2)
+            vagas = st.number_input("Número de Vagas", min_value=1, max_value=campo_info['jogadores_por_time']*5, value=campo_info['jogadores_por_time']*3)
             
             submit = st.form_submit_button("Criar Jogo", use_container_width=True)
             
             if submit:
                 data_str = data_jogo.strftime("%Y-%m-%d")
-                hora_inicio_str = hora_inicio.strftime("%H:%M")
-                hora_fim_str = hora_fim.strftime("%H:%M")
+                hora_inicio_str = hora_inicio
+                hora_fim_str = hora_fim
                 
                 # Validações
-                if hora_fim <= hora_inicio:
+                hora_inicio_time = datetime.strptime(hora_inicio, "%H:%M").time()
+                hora_fim_time = datetime.strptime(hora_fim, "%H:%M").time()
+                
+                if hora_fim_time <= hora_inicio_time:
                     st.error("O horário de término deve ser após o horário de início!")
                 elif verificar_conflito_horario(campo_id, data_str, hora_inicio_str, hora_fim_str):
                     st.error("⚠️ Este campo já está ocupado neste horário!")
@@ -409,20 +434,30 @@ def pagina_organizador():
                     if inscricoes_aprovadas:
                         st.write("**✅ Jogadores Confirmados:**")
                         
-                        for inscricao in inscricoes_aprovadas:
+                        # Enumera de baixo para cima (inverte a lista)
+                        for idx, inscricao in enumerate(reversed(inscricoes_aprovadas), 1):
                             jogador = buscar_usuario_por_id(inscricao['jogador_id'])
                             
                             col_a, col_b = st.columns([3, 1])
                             
                             with col_a:
                                 nome_jogador = jogador.get('apelido_jogador') or jogador.get('nome') or jogador.get('login')
-                                st.write(f"✅ {nome_jogador}")
+                                st.write(f"{idx}. {nome_jogador}")
                             
                             with col_b:
                                 if st.button("🗑️ Remover", key=f"remover_{inscricao['id']}"):
                                     remover_jogador_inscricao(inscricao['id'])
                                     st.success("Jogador removido!")
                                     st.rerun()
+                    
+                    # Botão para excluir jogo
+                    st.divider()
+                    if st.button("🗑️ Excluir Jogo", key=f"excluir_jogo_{jogo['id']}", type="secondary"):
+                        if excluir_jogo(jogo['id']):
+                            st.success("✅ Jogo excluído! Todos os inscritos foram notificados.")
+                            st.rerun()
+                        else:
+                            st.error("Erro ao excluir jogo!")
 
 
 # ============= PÁGINA JOGADOR =============
@@ -506,12 +541,13 @@ def pagina_jogador():
                         
                         if inscricoes_aprovadas:
                             st.write("**✅ Jogadores Confirmados:**")
+                            # Lista numerada
                             nomes = []
-                            for insc in inscricoes_aprovadas:
+                            for idx, insc in enumerate(reversed(inscricoes_aprovadas), 1):
                                 jog = buscar_usuario_por_id(insc['jogador_id'])
                                 nome = jog.get('apelido_jogador') or jog.get('nome') or jog.get('login')
-                                nomes.append(nome)
-                            st.write(", ".join(nomes))
+                                nomes.append(f"{idx}. {nome}")
+                            st.write("\n".join(nomes))
                         
                         # Verifica se usuário já se inscreveu
                         minhas_inscricoes = listar_inscricoes_por_jogador(usuario['id'])

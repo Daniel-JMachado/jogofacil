@@ -7,5 +7,23 @@
     "nome": "Daniel Machado",
     "apelido_jogador": "seninha",
     "foto": "user_1.jpeg"
+  },
+  {
+    "id": 2,
+    "login": "daniel",
+    "senha": "1234",
+    "telefone": "123456789",
+    "nome": "Daniel Jose",
+    "apelido_jogador": "dandan",
+    "foto": "user_2.jpg"
+  },
+  {
+    "id": 3,
+    "login": "Daniel2",
+    "senha": "1234",
+    "telefone": "125463258",
+    "nome": "Daniel2",
+    "apelido_jogador": "dani2",
+    "foto": "user_3.jpg"
   }
 ]
