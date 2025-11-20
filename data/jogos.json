@@ -8,17 +8,29 @@
     "hora_fim": "12:30",
     "valor": 10.0,
     "vagas_total": 12,
-    "vagas_ocupadas": 0,
+    "vagas_ocupadas": 2,
     "status": "ativo"
   },
   {
-    "id": 3,
+    "id": 4,
     "organizador_id": 1,
-    "campo_id": 1,
+    "campo_id": 3,
     "data": "2025-11-19",
     "hora_inicio": "10:00",
     "hora_fim": "11:30",
-    "valor": 0.0,
+    "valor": 10.0,
+    "vagas_total": 21,
+    "vagas_ocupadas": 2,
+    "status": "ativo"
+  },
+  {
+    "id": 5,
+    "organizador_id": 1,
+    "campo_id": 4,
+    "data": "2025-11-24",
+    "hora_inicio": "10:00",
+    "hora_fim": "11:30",
+    "valor": 10.0,
     "vagas_total": 20,
     "vagas_ocupadas": 1,
     "status": "ativo"

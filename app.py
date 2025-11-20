@@ -53,6 +53,19 @@ st.set_page_config(
     layout="wide"
 )
 
+# ============= CARREGA CSS CUSTOMIZADO =============
+
+def carregar_css():
+    """Carrega arquivo CSS customizado"""
+    try:
+        with open('style.css', 'r', encoding='utf-8') as f:
+            css = f.read()
+        st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass  # Se não encontrar o arquivo, continua sem CSS
+
+carregar_css()
+
 
 # ============= INICIALIZAÇÃO DO SESSION STATE =============
 
@@ -203,9 +216,7 @@ def mostrar_sidebar():
         # Foto e nome do usuário (centralizado)
         foto = carregar_foto_perfil(usuario.get('foto', ''))
         if foto:
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                st.image(foto, width=100)
+            st.image(foto, use_container_width=True)
         
         # Nome centralizado
         st.markdown(f"<h4 style='text-align: center;'>{usuario.get('apelido_jogador') or usuario.get('login')}</h4>", unsafe_allow_html=True)
@@ -218,23 +229,23 @@ def mostrar_sidebar():
         st.divider()
         
         # Menu
-        if st.button("👤 Perfil", use_container_width=True):
+        if st.button("Perfil", use_container_width=True):
             st.session_state.pagina_atual = 'perfil'
             st.rerun()
         
-        if st.button("📱 Feed", use_container_width=True):
+        if st.button("Feed", use_container_width=True):
             st.session_state.pagina_atual = 'feed'
             st.rerun()
         
-        if st.button("📋 Organizador", use_container_width=True):
+        if st.button("Organizador", use_container_width=True):
             st.session_state.pagina_atual = 'organizador'
             st.rerun()
         
-        if st.button("⚽ Jogador", use_container_width=True):
+        if st.button("Jogador", use_container_width=True):
             st.session_state.pagina_atual = 'jogador'
             st.rerun()
         
-        if st.button("🔔 Notificações", use_container_width=True):
+        if st.button("Notificações", use_container_width=True):
             st.session_state.pagina_atual = 'notificacoes'
             st.rerun()
         
@@ -567,6 +578,18 @@ def pagina_jogador():
                                 nome = jog.get('apelido_jogador') or jog.get('nome') or jog.get('login')
                                 nomes.append(f"{idx}. {nome}")
                             st.write("\n".join(nomes))
+                        
+                        # Jogadores pendentes
+                        inscricoes_pendentes = listar_inscricoes_por_jogo(jogo['id'], 'pendente')
+                        
+                        if inscricoes_pendentes:
+                            st.write("**⏳ Aguardando Aprovação:**")
+                            nomes_pendentes = []
+                            for insc in inscricoes_pendentes:
+                                jog = buscar_usuario_por_id(insc['jogador_id'])
+                                nome = jog.get('apelido_jogador') or jog.get('nome') or jog.get('login')
+                                nomes_pendentes.append(f"• {nome}")
+                            st.write("\n".join(nomes_pendentes))
                         
                         # Verifica se usuário já se inscreveu
                         minhas_inscricoes = listar_inscricoes_por_jogador(usuario['id'])

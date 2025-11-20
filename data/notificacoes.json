@@ -77,7 +77,7 @@
     "dados": {
       "seguidor_id": 3
     },
-    "lida": false,
+    "lida": true,
     "data_criacao": "2025-11-19 22:35:09"
   },
   {
@@ -124,7 +124,180 @@
       "post_id": 1,
       "usuario_id": 3
     },
-    "lida": false,
+    "lida": true,
     "data_criacao": "2025-11-19 22:35:38"
+  },
+  {
+    "id": 13,
+    "usuario_id": 1,
+    "tipo": "comentario_post",
+    "mensagem": "dani2 comentou sua postagem de 19/11/2025 22:09: \"fut top hoje\"",
+    "dados": {
+      "post_id": 1,
+      "comentario_id": 5
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:50:44"
+  },
+  {
+    "id": 14,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dani2 quer participar do seu jogo em Arena M10 no dia 29/11/2025 às 11:00.",
+    "dados": {
+      "jogo_id": 2,
+      "inscricao_id": 5
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:02:37"
+  },
+  {
+    "id": 15,
+    "usuario_id": 3,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Arena M10 no dia 29/11/2025 às 11:00.",
+    "dados": {
+      "jogo_id": 2
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:03:28"
+  },
+  {
+    "id": 16,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dandan quer participar do seu jogo em Arena M10 no dia 29/11/2025 às 11:00.",
+    "dados": {
+      "jogo_id": 2,
+      "inscricao_id": 6
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:30:38"
+  },
+  {
+    "id": 17,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dandan quer participar do seu jogo em Arena Smart no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 4,
+      "inscricao_id": 7
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:34:08"
+  },
+  {
+    "id": 18,
+    "usuario_id": 2,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Arena Smart no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 4
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:35:49"
+  },
+  {
+    "id": 19,
+    "usuario_id": 2,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Arena M10 no dia 29/11/2025 às 11:00.",
+    "dados": {
+      "jogo_id": 2
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:38:31"
+  },
+  {
+    "id": 20,
+    "usuario_id": 2,
+    "tipo": "jogo_cancelado",
+    "mensagem": "O jogo em Arena Park Descoberto no dia 19/11/2025 às 10:00 foi cancelado pelo organizador.",
+    "dados": {
+      "jogo_id": 3
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:39:05"
+  },
+  {
+    "id": 21,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dani2 quer participar do seu jogo em Arena Smart no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 4,
+      "inscricao_id": 8
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:39:37"
+  },
+  {
+    "id": 22,
+    "usuario_id": 1,
+    "tipo": "nova_inscricao",
+    "mensagem": "dani2 quer participar do seu jogo em Brazuca no dia 24/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 5,
+      "inscricao_id": 9
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:39:46"
+  },
+  {
+    "id": 23,
+    "usuario_id": 3,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Arena Smart no dia 19/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 4
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:40:10"
+  },
+  {
+    "id": 24,
+    "usuario_id": 3,
+    "tipo": "inscricao_aprovada",
+    "mensagem": "Sua inscrição foi aprovada! Jogo em Brazuca no dia 24/11/2025 às 10:00.",
+    "dados": {
+      "jogo_id": 5
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:40:16"
+  },
+  {
+    "id": 25,
+    "usuario_id": 1,
+    "tipo": "novo_seguidor",
+    "mensagem": "dandan começou a seguir você!",
+    "dados": {
+      "seguidor_id": 2
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:41:28"
+  },
+  {
+    "id": 26,
+    "usuario_id": 1,
+    "tipo": "curtida_post",
+    "mensagem": "dandan curtiu sua postagem de 19/11/2025 23:42: \"Fut top de...\"",
+    "dados": {
+      "post_id": 3,
+      "usuario_id": 2
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:42:31"
+  },
+  {
+    "id": 27,
+    "usuario_id": 1,
+    "tipo": "comentario_post",
+    "mensagem": "dandan comentou sua postagem de 19/11/2025 23:42: \"Fut top demais hoje\"",
+    "dados": {
+      "post_id": 3,
+      "comentario_id": 5
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 23:43:02"
   }
 ]

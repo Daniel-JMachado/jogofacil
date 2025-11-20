@@ -1,11 +1,5 @@
 [
   {
-    "id": 1,
-    "seguidor_id": 2,
-    "seguido_id": 1,
-    "data_inicio": "2025-11-19 22:10:43"
-  },
-  {
     "id": 2,
     "seguidor_id": 1,
     "seguido_id": 2,
@@ -34,5 +28,11 @@
     "seguidor_id": 3,
     "seguido_id": 2,
     "data_inicio": "2025-11-19 22:35:11"
+  },
+  {
+    "id": 7,
+    "seguidor_id": 2,
+    "seguido_id": 1,
+    "data_inicio": "2025-11-19 23:41:28"
   }
 ]

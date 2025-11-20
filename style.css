@@ -1,0 +1,939 @@
+/* ========================================
+   FUTEBOL SOCIETY - ESTILO CUSTOMIZADO
+   Tema: Campo de Futebol Moderno
+   ======================================== */
+
+/* ===== VARIÁVEIS DE COR ===== */
+:root {
+    /* Paleta principal - tons de campo */
+    --verde-campo: #1a4d2e;
+    --verde-grama: #2d7a4f;
+    --verde-claro: #4a9d6f;
+    --verde-neon: #00ff88;
+    
+    /* Tons neutros */
+    --branco-suave: #f5f5f5;
+    --cinza-claro: #e8e8e8;
+    --cinza-medio: #9ca3af;
+    --cinza-escuro: #374151;
+    --preto-suave: #1f2937;
+    
+    /* Acentos */
+    --amarelo-cartao: #fbbf24;
+    --azul-ceu: #3b82f6;
+    --laranja-energia: #f97316;
+}
+
+/* ===== RESETAR STREAMLIT ===== */
+.stApp {
+    background: linear-gradient(135deg, #0f2027 0%, #1a4d2e 50%, #2d7a4f 100%);
+    background-attachment: fixed;
+}
+
+/* Reduzir espaçamentos gerais */
+.element-container {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Reduzir gap entre elementos */
+.row-widget {
+    gap: 0.5rem !important;
+}
+
+/* Remover padding padrão */
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    max-width: 1200px;
+}
+
+/* ===== HEADER E TÍTULOS ===== */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--branco-suave) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: 2.5rem !important;
+    background: linear-gradient(90deg, var(--verde-neon), var(--verde-claro));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+h2 {
+    border-left: 4px solid var(--verde-neon);
+    padding-left: 1rem;
+    margin-bottom: 0.75rem !important;
+    margin-top: 0.5rem !important;
+}
+
+h3, h4 {
+    color: var(--verde-claro) !important;
+}
+
+/* ===== SIDEBAR ===== */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, var(--preto-suave) 0%, var(--verde-campo) 100%) !important;
+    border-right: 2px solid var(--verde-grama);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    padding-top: 1rem;
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+    color: var(--branco-suave) !important;
+}
+
+/* Imagem de perfil na sidebar */
+[data-testid="stSidebar"] img {
+    border-radius: 8px !important;
+    border: 3px solid var(--verde-neon);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto 0.1rem auto;
+    max-width: 150px;
+}
+
+[data-testid="stSidebar"] img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+}
+
+/* ===== BOTÕES ===== */
+.stButton > button {
+    background: linear-gradient(135deg, var(--verde-grama), var(--verde-campo)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Força todos os tipos de botões */
+button[kind],
+[data-testid*="stButton"] button,
+[data-testid="stFormSubmitButton"] button {
+    background: linear-gradient(135deg, var(--verde-grama), var(--verde-campo)) !important;
+    color: white !important;
+    border: 1px solid var(--verde-neon) !important;
+}
+
+/* Força texto branco em TODOS os botões */
+button[kind] p,
+button[kind] span,
+button[kind] div {
+    color: white !important;
+}
+
+.stButton > button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.stButton > button:hover:before {
+    left: 100%;
+}
+
+.stButton > button:hover {
+    background: linear-gradient(135deg, var(--verde-claro), var(--verde-grama)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+}
+
+/* Botões da sidebar */
+[data-testid="stSidebar"] .stButton > button {
+    width: 100% !important;
+    background: rgba(45, 122, 79, 0.3) !important;
+    border: 1px solid var(--verde-grama) !important;
+    margin-bottom: 0.02rem;
+    padding: 0.6rem 1rem !important;
+}
+
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: var(--verde-grama) !important;
+    border-color: var(--verde-neon) !important;
+}
+
+/* ===== INPUTS E FORMS ===== */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stNumberInput > div > div > input,
+.stSelectbox > div > div,
+.stDateInput > div > div > input {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    color: var(--branco-suave) !important;
+    border: 1px solid var(--verde-grama) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    transition: all 0.3s ease;
+    min-height: 45px;
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus,
+.stNumberInput > div > div > input:focus,
+.stSelectbox > div > div:focus-within,
+.stDateInput > div > div > input:focus {
+    border-color: var(--verde-neon) !important;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.2) !important;
+    background-color: rgba(30, 30, 30, 0.9) !important;
+}
+
+/* Date input específico */
+.stDateInput input[type="text"] {
+    color: var(--branco-suave) !important;
+    font-weight: 500 !important;
+    background-color: rgba(30, 30, 30, 0.9) !important;
+}
+
+.stDateInput svg {
+    fill: var(--verde-claro) !important;
+}
+
+/* Selectbox específico */
+.stSelectbox [data-baseweb="select"] {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    min-height: 50px !important;
+}
+
+.stSelectbox [data-baseweb="select"] > div {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    color: var(--branco-suave) !important;
+    border-color: var(--verde-grama) !important;
+    padding: 0.75rem 2.5rem 0.75rem 0.75rem !important;
+    line-height: 1.5 !important;
+    min-height: 50px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Texto selecionado no selectbox - AUMENTAR ESPAÇO */
+.stSelectbox [data-baseweb="select"] span {
+    color: var(--branco-suave) !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+}
+
+/* Valor exibido no selectbox - REMOVER CORTE */
+.stSelectbox [data-baseweb="select"] [class*="st-gi"],
+.stSelectbox [data-baseweb="select"] div[value] {
+    color: var(--branco-suave) !important;
+    font-size: 0.95rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.5 !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+    max-width: 100% !important;
+    width: auto !important;
+    flex: 1 !important;
+}
+
+/* Container interno do selectbox */
+.stSelectbox div[class*="st-ay st-af st-ai"] {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 50px !important;
+    padding-right: 2rem !important;
+}
+
+/* Input invisível dentro do selectbox */
+.stSelectbox input[role="combobox"] {
+    opacity: 0 !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Ícone do selectbox - posicionar à direita */
+.stSelectbox svg {
+    fill: var(--verde-claro) !important;
+    flex-shrink: 0 !important;
+    position: absolute !important;
+    right: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+/* Placeholder */
+input::placeholder, textarea::placeholder {
+    color: var(--cinza-medio) !important;
+    opacity: 0.7;
+}
+
+/* Options de selectbox */
+[role="option"] {
+    background-color: var(--preto-suave) !important;
+    color: var(--branco-suave) !important;
+}
+
+[role="option"]:hover {
+    background-color: var(--verde-grama) !important;
+}
+
+/* Listbox */
+[role="listbox"] {
+    background-color: var(--preto-suave) !important;
+    border: 1px solid var(--verde-grama) !important;
+}
+
+/* Labels */
+.stTextInput label, .stTextArea label, .stNumberInput label, 
+.stSelectbox label, .stDateInput label, .stFileUploader label {
+    color: var(--verde-claro) !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+    z-index: 10 !important;
+    position: relative !important;
+}
+
+/* Força cor de labels em qualquer tema */
+label, .stMarkdown label {
+    color: var(--verde-claro) !important;
+}
+
+/* Text helper/caption nos inputs */
+.stTextInput small, .stTextArea small, .stNumberInput small,
+.stSelectbox small, .stDateInput small, .stFileUploader small {
+    color: var(--cinza-medio) !important;
+}
+
+/* ===== TABS ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: rgba(45, 122, 79, 0.3);
+    color: var(--branco-suave) !important;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background-color: rgba(45, 122, 79, 0.5);
+    border-color: var(--verde-grama);
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, var(--verde-grama), var(--verde-campo)) !important;
+    border-color: var(--verde-neon) !important;
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.2);
+}
+
+/* ===== CONTAINERS E CARDS ===== */
+[data-testid="stVerticalBlock"] > div {
+    background-color: transparent;
+    border-radius: 0px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    transition: none;
+}
+
+[data-testid="stVerticalBlock"] > div:hover {
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ===== MÉTRICAS ===== */
+[data-testid="stMetric"] {
+    background: linear-gradient(135deg, rgba(26, 77, 46, 0.4), rgba(45, 122, 79, 0.2));
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--verde-grama);
+    box-shadow: none;
+}
+
+[data-testid="stMetricLabel"] {
+    color: var(--verde-claro) !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--verde-neon) !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* ===== DIVIDER ===== */
+hr {
+    border: none !important;
+    height: 2px !important;
+    background: var(--verde-grama) !important;
+    background: linear-gradient(90deg, transparent, var(--verde-grama), transparent) !important;
+    margin: 0.5rem 0 !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+/* Divider específico da sidebar */
+[data-testid="stSidebar"] hr {
+    margin: 0.3rem 0 !important;
+    background: linear-gradient(90deg, transparent, var(--verde-neon), transparent) !important;
+}
+
+/* Dividers em containers */
+.stMarkdown hr {
+    background: linear-gradient(90deg, transparent, rgba(45, 122, 79, 0.8), transparent) !important;
+    height: 2px !important;
+    margin: 1rem 0 !important;
+}
+
+/* Nome do usuário na sidebar */
+[data-testid="stSidebar"] h4 {
+    margin-top: 0 !important;
+    margin-bottom: 0rem !important;
+    padding-top: 0 !important;
+}
+
+/* ===== ALERTAS E MENSAGENS ===== */
+.stAlert {
+    border-radius: 8px !important;
+    border-left: 3px solid !important;
+    backdrop-filter: none;
+    padding: 0.75rem !important;
+    margin: 0.5rem 0 !important;
+}
+
+/* Info */
+[data-baseweb="notification"] [data-testid="stMarkdownContainer"] {
+    color: var(--branco-suave) !important;
+}
+
+.stAlert[data-baseweb="notification"][kind="info"],
+.stInfo {
+    background-color: rgba(59, 130, 246, 0.3) !important;
+    border-left-color: var(--azul-ceu) !important;
+    color: var(--branco-suave) !important;
+}
+
+.stAlert[data-baseweb="notification"][kind="info"] p,
+.stInfo p {
+    color: var(--branco-suave) !important;
+    font-weight: 500 !important;
+}
+
+/* Success */
+.stAlert[data-baseweb="notification"][kind="success"],
+.stSuccess {
+    background-color: rgba(45, 122, 79, 0.3) !important;
+    border-left-color: var(--verde-neon) !important;
+}
+
+/* Warning */
+.stAlert[data-baseweb="notification"][kind="warning"],
+.stWarning {
+    background-color: rgba(251, 191, 36, 0.2) !important;
+    border-left-color: var(--amarelo-cartao) !important;
+}
+
+/* Error */
+.stAlert[data-baseweb="notification"][kind="error"],
+.stError {
+    background-color: rgba(249, 115, 22, 0.2) !important;
+    border-left-color: var(--laranja-energia) !important;
+}
+
+/* ===== IMAGENS ===== */
+img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: none;
+}
+
+img:hover {
+    transform: none;
+}
+
+/* ===== FILE UPLOADER ===== */
+[data-testid="stFileUploader"] {
+    background-color: rgba(31, 41, 55, 0.3);
+    border: 1px dashed var(--verde-grama);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: var(--verde-neon);
+    background-color: rgba(31, 41, 55, 0.4);
+}
+
+/* Texto do file uploader */
+[data-testid="stFileUploader"] section {
+    color: var(--branco-suave) !important;
+}
+
+[data-testid="stFileUploader"] button {
+    background-color: var(--verde-grama) !important;
+    color: white !important;
+    border: 1px solid var(--verde-neon) !important;
+}
+
+[data-testid="stFileUploader"] small {
+    color: var(--cinza-medio) !important;
+}
+
+/* ===== EXPANDER ===== */
+[data-testid="stExpander"] {
+    background-color: rgba(31, 41, 55, 0.3) !important;
+    border: 1px solid var(--verde-grama) !important;
+    border-radius: 8px !important;
+    margin-bottom: 0.5rem !important;
+}
+
+[data-testid="stExpander"] summary {
+    color: var(--verde-claro) !important;
+    font-weight: 600 !important;
+}
+
+/* ===== SCROLLBAR CUSTOMIZADA ===== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--verde-grama), var(--verde-campo));
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--verde-claro), var(--verde-grama));
+}
+
+/* ===== CAPTIONS E TEXTOS ===== */
+.stCaption, [data-testid="stCaptionContainer"] {
+    color: var(--cinza-medio) !important;
+    font-size: 0.875rem !important;
+}
+
+p, li, span, div {
+    color: var(--branco-suave) !important;
+}
+
+/* Força texto visível em elementos específicos */
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] span,
+[data-testid="stMarkdownContainer"] div {
+    color: var(--branco-suave) !important;
+}
+
+/* Placeholder text */
+::placeholder {
+    color: var(--cinza-medio) !important;
+    opacity: 0.8 !important;
+}
+
+:-ms-input-placeholder {
+    color: var(--cinza-medio) !important;
+}
+
+::-ms-input-placeholder {
+    color: var(--cinza-medio) !important;
+}
+
+/* ===== MARKDOWN CUSTOMIZADO ===== */
+.stMarkdown {
+    color: var(--branco-suave) !important;
+}
+
+.stMarkdown a {
+    color: var(--verde-neon) !important;
+    text-decoration: none;
+    border-bottom: 2px solid var(--verde-neon);
+    transition: all 0.3s ease;
+}
+
+.stMarkdown a:hover {
+    color: var(--verde-claro) !important;
+    border-bottom-color: var(--verde-claro);
+}
+
+/* ===== ANIMAÇÕES DE ENTRADA ===== */
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.element-container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* ===== EFEITO DE CAMPO DE FUTEBOL ===== */
+.stApp::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 100px,
+            rgba(45, 122, 79, 0.1) 100px,
+            rgba(45, 122, 79, 0.1) 102px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 100px,
+            rgba(45, 122, 79, 0.1) 100px,
+            rgba(45, 122, 79, 0.1) 102px
+        );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+/* ===== FORMS - ESTILO APRIMORADO ===== */
+[data-testid="stForm"] {
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid var(--verde-grama);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: none;
+    backdrop-filter: blur(5px);
+}
+
+/* ===== COLUNAS ===== */
+[data-testid="column"] {
+    padding: 0.25rem;
+}
+
+/* ===== SPINNER/LOADING ===== */
+.stSpinner > div {
+    border-top-color: var(--verde-neon) !important;
+    border-right-color: var(--verde-neon) !important;
+}
+
+/* ===== TOOLTIP ===== */
+[data-baseweb="tooltip"] {
+    background-color: var(--preto-suave) !important;
+    color: var(--branco-suave) !important;
+    border: 1px solid var(--verde-grama) !important;
+    border-radius: 8px !important;
+}
+
+/* ===== CALENDÁRIO (DATE PICKER) ===== */
+[data-baseweb="calendar"],
+[data-baseweb="popover"] {
+    background-color: var(--preto-suave) !important;
+    border: 2px solid var(--verde-grama) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Dias do calendário */
+[data-baseweb="calendar"] button {
+    background-color: rgba(45, 122, 79, 0.3) !important;
+    color: var(--branco-suave) !important;
+    border: 1px solid transparent !important;
+}
+
+[data-baseweb="calendar"] button:hover {
+    background-color: var(--verde-grama) !important;
+    border-color: var(--verde-neon) !important;
+}
+
+/* Dia selecionado */
+[data-baseweb="calendar"] button[aria-selected="true"] {
+    background-color: var(--verde-grama) !important;
+    color: white !important;
+    font-weight: 700 !important;
+}
+
+/* Header do calendário */
+[data-baseweb="calendar"] [role="heading"] {
+    color: var(--verde-claro) !important;
+    font-weight: 600 !important;
+}
+
+/* Navegação do calendário */
+[data-baseweb="calendar"] svg {
+    fill: var(--verde-claro) !important;
+}
+
+/* ===== EFEITO HOVER GERAL ===== */
+.element-container:hover {
+    z-index: 1;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .block-container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    h1 {
+        font-size: 2rem !important;
+    }
+    
+    .stButton > button {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ===== BADGED/CONTADOR DE NOTIFICAÇÕES ===== */
+.stWarning {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+}
+
+/* ===== CUSTOMIZAÇÃO ESPECÍFICA PARA POSTS/FEED ===== */
+.stMarkdown hr {
+    background: linear-gradient(90deg, transparent, rgba(45, 122, 79, 0.5), transparent) !important;
+    height: 1px !important;
+    margin: 1rem 0 !important;
+}
+
+/* Botões de curtir e comentar */
+.stButton > button[kind="secondary"] {
+    background: rgba(45, 122, 79, 0.2) !important;
+    border: 1px solid var(--verde-grama) !important;
+}
+
+/* Remover backgrounds aninhados em containers */
+[data-testid="column"] > div,
+[data-testid="stHorizontalBlock"] > div {
+    background: transparent !important;
+    padding: 0.25rem !important;
+}
+
+/* Simplificar containers de posts */
+.stMarkdown + .element-container {
+    padding: 0 !important;
+    margin: 0.25rem 0 !important;
+}
+
+/* ===== EFEITO DE BRILHO NOS CARDS ===== */
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+/* ===== AJUSTES FINAIS ===== */
+.stApp > header {
+    background-color: transparent !important;
+}
+
+/* Remove fundo vermelho padrão do Streamlit */
+[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+/* Ajuste de texto do footer */
+footer {
+    color: var(--cinza-medio) !important;
+    text-align: center;
+}
+
+/* ===== SELEÇÃO DE TEXTO ===== */
+::selection {
+    background-color: var(--verde-grama);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--verde-grama);
+    color: white;
+}
+
+/* ===== FORÇA CONTRASTE EM TODOS OS ELEMENTOS ===== */
+/* Garante visibilidade em tema claro e escuro */
+* {
+    color-scheme: dark;
+}
+
+/* Força fundo escuro nos inputs */
+input, textarea, select {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    color: var(--branco-suave) !important;
+    caret-color: var(--verde-neon) !important;
+}
+
+/* Cursor piscando em textarea e input */
+input:focus, textarea:focus {
+    caret-color: var(--verde-neon) !important;
+}
+
+/* Number input específico */
+.stNumberInput input[type="number"] {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    color: var(--branco-suave) !important;
+    font-weight: 500 !important;
+}
+
+/* Botões de incremento do number input */
+.stNumberInput button {
+    background-color: rgba(45, 122, 79, 0.5) !important;
+    color: var(--verde-claro) !important;
+    border-color: var(--verde-grama) !important;
+}
+
+/* Texto em botões sempre branco */
+button {
+    color: white !important;
+}
+
+/* Botões de submit dos forms */
+button[kind="primary"],
+button[kind="primaryFormSubmit"],
+button[kind="secondaryFormSubmit"],
+.stButton button[type="submit"] {
+    background: linear-gradient(135deg, var(--verde-grama), var(--verde-campo)) !important;
+    color: white !important;
+    border: 1px solid var(--verde-neon) !important;
+    font-weight: 700 !important;
+}
+
+/* Força texto dos botões de submit */
+button[kind="secondaryFormSubmit"] p,
+button[kind="primaryFormSubmit"] p,
+button[kind="primary"] p {
+    color: white !important;
+    margin: 0 !important;
+    font-weight: 600 !important;
+}
+
+/* Ícones visíveis */
+svg {
+    filter: brightness(1.2);
+}
+
+/* Text em containers */
+[data-testid="stVerticalBlock"] p,
+[data-testid="stVerticalBlock"] span,
+[data-testid="stHorizontalBlock"] p,
+[data-testid="stHorizontalBlock"] span {
+    color: var(--branco-suave) !important;
+}
+
+/* Form elements text */
+form label,
+form p,
+form span {
+    color: var(--verde-claro) !important;
+}
+
+/* Classes específicas do Streamlit para selectbox */
+.st-cl, .st-co, .st-cm, .st-cn {
+    min-height: 50px !important;
+}
+
+/* Container do valor selecionado */
+div[class*="st-gi"] {
+    padding: 0 !important;
+    color: var(--branco-suave) !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+    flex: 1 !important;
+}
+
+/* Container externo com múltiplas classes st-* */
+div[class*="st-ay st-af st-ai"] {
+    min-height: 50px !important;
+    padding-right: 2.5rem !important;
+}
+
+/* Esconder input invisível que causa problema */
+input[aria-label*="Selected"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    left: -9999px !important;
+}
+
+/* Botão submit com classes do Streamlit */
+.st-emotion-cache-1z0ldxb,
+button[class*="st-emotion-cache"] {
+    background: linear-gradient(135deg, var(--verde-grama), var(--verde-campo)) !important;
+    color: white !important;
+}
+
+/* Texto dentro de botões submit */
+.st-emotion-cache-bvleps p,
+button[class*="st-emotion-cache"] p {
+    color: white !important;
+    font-weight: 600 !important;
+}
