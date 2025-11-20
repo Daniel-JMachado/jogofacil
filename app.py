@@ -29,6 +29,21 @@ from utils import (
     FOTOS_DIR
 )
 
+# Importa funções do feed
+from utils_feed import (
+    # Posts
+    criar_post, editar_post, excluir_post, listar_posts_usuario,
+    listar_feed, buscar_post_por_id, carregar_foto_post,
+    # Seguir
+    seguir_usuario, deixar_seguir, esta_seguindo, listar_ids_seguindo,
+    listar_ids_seguidores, contar_seguindo, contar_seguidores,
+    # Curtidas
+    curtir_post, descurtir_post, usuario_curtiu, contar_curtidas,
+    # Comentários
+    adicionar_comentario, excluir_comentario, listar_comentarios_post,
+    contar_comentarios
+)
+
 
 # ============= CONFIGURAÇÕES DA PÁGINA =============
 
@@ -203,19 +218,23 @@ def mostrar_sidebar():
         st.divider()
         
         # Menu
-        if st.button("Perfil", use_container_width=True):
+        if st.button("👤 Perfil", use_container_width=True):
             st.session_state.pagina_atual = 'perfil'
             st.rerun()
         
-        if st.button("Organizar", use_container_width=True):
+        if st.button("📱 Feed", use_container_width=True):
+            st.session_state.pagina_atual = 'feed'
+            st.rerun()
+        
+        if st.button("📋 Organizador", use_container_width=True):
             st.session_state.pagina_atual = 'organizador'
             st.rerun()
         
-        if st.button("Jogar", use_container_width=True):
+        if st.button("⚽ Jogador", use_container_width=True):
             st.session_state.pagina_atual = 'jogador'
             st.rerun()
         
-        if st.button("Notificações", use_container_width=True):
+        if st.button("🔔 Notificações", use_container_width=True):
             st.session_state.pagina_atual = 'notificacoes'
             st.rerun()
         
@@ -664,6 +683,318 @@ def pagina_notificacoes():
                 st.divider()
 
 
+# ============= PÁGINA DE FEED =============
+
+def pagina_feed():
+    """Página do feed social"""
+    
+    usuario = st.session_state.usuario_logado
+    
+    st.title("📱 Feed Social")
+    
+    # Tabs
+    tab_feed, tab_meus_posts, tab_amigos = st.tabs(["Feed", "Minhas Postagens", "Amigos"])
+    
+    # === TAB FEED PRINCIPAL ===
+    with tab_feed:
+        st.subheader("O que está acontecendo?")
+        
+        # Formulário para criar post
+        with st.form("form_criar_post", clear_on_submit=True):
+            texto_post = st.text_area("Escreva algo...", max_chars=140, placeholder="Compartilhe algo sobre futebol! ⚽")
+            caracteres_restantes = 140 - len(texto_post)
+            st.caption(f"{caracteres_restantes} caracteres restantes")
+            
+            foto_post = st.file_uploader("Adicionar foto (opcional)", type=['jpg', 'jpeg', 'png'], key="upload_post_feed")
+            
+            col_btn1, col_btn2 = st.columns([1, 4])
+            with col_btn1:
+                submit_post = st.form_submit_button("📤 Postar", use_container_width=True)
+            
+            if submit_post:
+                if not texto_post and not foto_post:
+                    st.error("Escreva algo ou adicione uma foto!")
+                else:
+                    post = criar_post(usuario['id'], texto_post, foto_post)
+                    if post:
+                        st.success("✅ Post criado!")
+                        st.rerun()
+                    else:
+                        st.error("Erro ao criar post!")
+        
+        st.divider()
+        
+        # Lista posts do feed
+        posts_feed = listar_feed(usuario['id'], limite=20)
+        
+        if not posts_feed:
+            st.info("📭 Seu feed está vazio. Siga outros jogadores para ver posts!")
+        else:
+            for post in posts_feed:
+                exibir_post(post, usuario['id'], prefixo_key="feed")
+    
+    # === TAB MINHAS POSTAGENS ===
+    with tab_meus_posts:
+        st.subheader("Minhas Postagens")
+        
+        meus_posts = listar_posts_usuario(usuario['id'])
+        
+        if not meus_posts:
+            st.info("Você ainda não fez nenhuma postagem.")
+        else:
+            for post in meus_posts:
+                exibir_post(post, usuario['id'], exibir_acoes_autor=True, prefixo_key="meus")
+    
+    # === TAB AMIGOS ===
+    with tab_amigos:
+        st.subheader("Amigos")
+        
+        # Estatísticas
+        col_stat1, col_stat2 = st.columns(2)
+        with col_stat1:
+            st.metric("👥 Seguindo", contar_seguindo(usuario['id']))
+        with col_stat2:
+            st.metric("❤️ Seguidores", contar_seguidores(usuario['id']))
+        
+        st.divider()
+        
+        # Sub-tabs para Buscar, Seguindo e Seguidores
+        subtab_buscar, subtab_seguindo, subtab_seguidores = st.tabs(["🔍 Buscar", "👥 Seguindo", "❤️ Seguidores"])
+        
+        # Buscar jogadores
+        with subtab_buscar:
+            st.write("### Buscar Jogadores")
+            
+            # Campo de busca
+            termo_busca = st.text_input("Digite nome ou apelido", placeholder="Ex: Daniel")
+            
+            if termo_busca:
+                # Importa função de listar usuários
+                from utils import carregar_usuarios
+                todos_usuarios = carregar_usuarios()
+                
+                # Filtra usuários pelo termo de busca (excluindo o próprio usuário)
+                resultados = [
+                    u for u in todos_usuarios 
+                    if u['id'] != usuario['id'] and (
+                        termo_busca.lower() in u.get('login', '').lower() or
+                        termo_busca.lower() in u.get('nome', '').lower() or
+                        termo_busca.lower() in u.get('apelido_jogador', '').lower()
+                    )
+                ]
+                
+                if not resultados:
+                    st.info("Nenhum jogador encontrado.")
+                else:
+                    for user in resultados[:10]:  # Mostra até 10 resultados
+                        col_user, col_btn = st.columns([3, 1])
+                        
+                        with col_user:
+                            nome = user.get('apelido_jogador') or user.get('nome') or user.get('login')
+                            st.write(f"👤 **{nome}**")
+                        
+                        with col_btn:
+                            if esta_seguindo(usuario['id'], user['id']):
+                                if st.button("✓ Seguindo", key=f"seguindo_{user['id']}", type="secondary"):
+                                    deixar_seguir(usuario['id'], user['id'])
+                                    st.rerun()
+                            else:
+                                if st.button("+ Seguir", key=f"seguir_{user['id']}", type="primary"):
+                                    seguir_usuario(usuario['id'], user['id'])
+                                    st.success(f"Agora você segue {nome}!")
+                                    st.rerun()
+        
+        # Seguindo
+        with subtab_seguindo:
+            seguindo_ids = listar_ids_seguindo(usuario['id'])
+            
+            if not seguindo_ids:
+                st.info("Você não está seguindo ninguém ainda.")
+            else:
+                from utils import buscar_usuario_por_id
+                
+                for user_id in seguindo_ids:
+                    user = buscar_usuario_por_id(user_id)
+                    if user:
+                        col_user, col_btn = st.columns([3, 1])
+                        
+                        with col_user:
+                            nome = user.get('apelido_jogador') or user.get('nome') or user.get('login')
+                            st.write(f"👤 **{nome}**")
+                        
+                        with col_btn:
+                            if st.button("Deixar de seguir", key=f"deixar_{user_id}"):
+                                deixar_seguir(usuario['id'], user_id)
+                                st.success(f"Você deixou de seguir {nome}")
+                                st.rerun()
+        
+        # Seguidores
+        with subtab_seguidores:
+            seguidores_ids = listar_ids_seguidores(usuario['id'])
+            
+            if not seguidores_ids:
+                st.info("Você ainda não tem seguidores.")
+            else:
+                from utils import buscar_usuario_por_id
+                
+                for user_id in seguidores_ids:
+                    user = buscar_usuario_por_id(user_id)
+                    if user:
+                        col_user, col_btn = st.columns([3, 1])
+                        
+                        with col_user:
+                            nome = user.get('apelido_jogador') or user.get('nome') or user.get('login')
+                            st.write(f"👤 **{nome}**")
+                        
+                        with col_btn:
+                            # Verifica se você também segue essa pessoa
+                            if esta_seguindo(usuario['id'], user_id):
+                                st.caption("✓ Seguindo também")
+                            else:
+                                if st.button("+ Seguir de volta", key=f"seguir_volta_{user_id}"):
+                                    seguir_usuario(usuario['id'], user_id)
+                                    st.success(f"Agora você segue {nome}!")
+                                    st.rerun()
+
+
+def exibir_post(post, usuario_logado_id, exibir_acoes_autor=False, prefixo_key="post"):
+    """Exibe um post com curtidas e comentários"""
+    
+    from utils import buscar_usuario_por_id
+    
+    autor = buscar_usuario_por_id(post['usuario_id'])
+    nome_autor = autor.get('apelido_jogador') or autor.get('nome') or autor.get('login')
+    
+    with st.container():
+        st.markdown("---")
+        
+        # Cabeçalho do post
+        col_foto, col_info = st.columns([1, 5])
+        
+        with col_foto:
+            foto_autor = carregar_foto_perfil(autor.get('foto', ''))
+            if foto_autor:
+                st.image(foto_autor, width=50)
+            else:
+                st.write("👤")
+        
+        with col_info:
+            st.write(f"**{nome_autor}**")
+            data_post = datetime.strptime(post['data_criacao'], "%Y-%m-%d %H:%M:%S")
+            st.caption(data_post.strftime("%d/%m/%Y às %H:%M"))
+        
+        # Texto do post
+        if post.get('texto'):
+            st.write(post['texto'])
+        
+        # Foto do post
+        if post.get('foto'):
+            foto_post = carregar_foto_post(post['foto'])
+            if foto_post:
+                st.image(foto_post, use_container_width=True)
+        
+        # Ações do autor (editar/excluir)
+        if exibir_acoes_autor and post['usuario_id'] == usuario_logado_id:
+            col_edit, col_del, col_space = st.columns([1, 1, 4])
+            
+            with col_edit:
+                if st.button("✏️ Editar", key=f"{prefixo_key}_editar_{post['id']}"):
+                    st.session_state.editando_post_id = post['id']
+                    st.session_state.texto_edicao = post.get('texto', '')
+            
+            with col_del:
+                if st.button("🗑️ Excluir", key=f"{prefixo_key}_excluir_{post['id']}"):
+                    if excluir_post(post['id']):
+                        st.success("Post excluído!")
+                        st.rerun()
+            
+            # Formulário de edição
+            if st.session_state.get('editando_post_id') == post['id']:
+                with st.form(f"{prefixo_key}_form_editar_{post['id']}"):
+                    novo_texto = st.text_area("Editar texto", value=st.session_state.texto_edicao, max_chars=140)
+                    
+                    col_salvar, col_cancelar = st.columns(2)
+                    with col_salvar:
+                        submit_edicao = st.form_submit_button("💾 Salvar")
+                    with col_cancelar:
+                        cancelar_edicao = st.form_submit_button("❌ Cancelar")
+                    
+                    if submit_edicao:
+                        if editar_post(post['id'], novo_texto):
+                            st.success("Post atualizado!")
+                            st.session_state.editando_post_id = None
+                            st.rerun()
+                    
+                    if cancelar_edicao:
+                        st.session_state.editando_post_id = None
+                        st.rerun()
+        
+        # Curtidas e Comentários
+        st.write("")
+        col_curtir, col_comentar = st.columns([1, 5])
+        
+        num_curtidas = contar_curtidas(post['id'])
+        curtiu = usuario_curtiu(post['id'], usuario_logado_id)
+        
+        with col_curtir:
+            if curtiu:
+                if st.button(f"❤️ {num_curtidas}", key=f"{prefixo_key}_curtir_{post['id']}"):
+                    descurtir_post(post['id'], usuario_logado_id)
+                    st.rerun()
+            else:
+                if st.button(f"🤍 {num_curtidas}", key=f"{prefixo_key}_curtir_{post['id']}"):
+                    curtir_post(post['id'], usuario_logado_id)
+                    st.rerun()
+        
+        with col_comentar:
+            num_comentarios = contar_comentarios(post['id'])
+            if st.button(f"💬 {num_comentarios} comentários", key=f"{prefixo_key}_ver_coment_{post['id']}"):
+                if st.session_state.get('post_comentarios_id') == post['id']:
+                    st.session_state.post_comentarios_id = None
+                else:
+                    st.session_state.post_comentarios_id = post['id']
+                st.rerun()
+        
+        # Seção de comentários
+        if st.session_state.get('post_comentarios_id') == post['id']:
+            st.write("---")
+            st.write("**💬 Comentários**")
+            
+            # Formulário para adicionar comentário
+            with st.form(f"{prefixo_key}_form_comentario_{post['id']}", clear_on_submit=True):
+                texto_comentario = st.text_input("Escreva um comentário...", max_chars=100)
+                submit_comentario = st.form_submit_button("Comentar")
+                
+                if submit_comentario and texto_comentario:
+                    adicionar_comentario(post['id'], usuario_logado_id, texto_comentario)
+                    st.success("Comentário adicionado!")
+                    st.rerun()
+            
+            # Lista comentários
+            comentarios = listar_comentarios_post(post['id'])
+            
+            if comentarios:
+                for comentario in comentarios:
+                    autor_coment = buscar_usuario_por_id(comentario['usuario_id'])
+                    nome_autor_coment = autor_coment.get('apelido_jogador') or autor_coment.get('nome') or autor_coment.get('login')
+                    
+                    col_coment, col_del_coment = st.columns([5, 1])
+                    
+                    with col_coment:
+                        st.write(f"**{nome_autor_coment}:** {comentario['texto']}")
+                        data_coment = datetime.strptime(comentario['data'], "%Y-%m-%d %H:%M:%S")
+                        st.caption(data_coment.strftime("%d/%m/%Y %H:%M"))
+                    
+                    with col_del_coment:
+                        # Pode excluir se for seu comentário OU se for dono do post
+                        if comentario['usuario_id'] == usuario_logado_id or post['usuario_id'] == usuario_logado_id:
+                            if st.button("🗑️", key=f"{prefixo_key}_del_coment_{comentario['id']}"):
+                                excluir_comentario(comentario['id'])
+                                st.rerun()
+            else:
+                st.info("Seja o primeiro a comentar!")
+
+
 # ============= ROTEAMENTO DE PÁGINAS =============
 
 def main():
@@ -679,6 +1010,8 @@ def main():
         # Roteamento de páginas
         if st.session_state.pagina_atual == 'perfil':
             pagina_perfil()
+        elif st.session_state.pagina_atual == 'feed':
+            pagina_feed()
         elif st.session_state.pagina_atual == 'organizador':
             pagina_organizador()
         elif st.session_state.pagina_atual == 'jogador':

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "usuario_id": 1,
+    "texto": "fut top hoje",
+    "foto": "post_1.jpg",
+    "data_criacao": "2025-11-19 22:09:51"
+  },
+  {
+    "id": 2,
+    "usuario_id": 2,
+    "texto": "Testando postagem sem foto",
+    "foto": "",
+    "data_criacao": "2025-11-19 22:33:14"
+  }
+]

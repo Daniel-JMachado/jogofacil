@@ -1,17 +1,5 @@
 [
   {
-    "id": 1,
-    "usuario_id": 1,
-    "tipo": "nova_inscricao",
-    "mensagem": "Novo jogador quer participar do seu jogo!",
-    "dados": {
-      "jogo_id": 1,
-      "inscricao_id": 1
-    },
-    "lida": true,
-    "data_criacao": "2025-11-19 19:07:32"
-  },
-  {
     "id": 2,
     "usuario_id": 1,
     "tipo": "nova_inscricao",
@@ -20,7 +8,7 @@
       "jogo_id": 3,
       "inscricao_id": 4
     },
-    "lida": false,
+    "lida": true,
     "data_criacao": "2025-11-19 21:45:15"
   },
   {
@@ -31,7 +19,7 @@
     "dados": {
       "jogo_id": 3
     },
-    "lida": false,
+    "lida": true,
     "data_criacao": "2025-11-19 21:45:39"
   },
   {
@@ -42,7 +30,101 @@
     "dados": {
       "jogo_id": 1
     },
-    "lida": false,
+    "lida": true,
     "data_criacao": "2025-11-19 21:46:39"
+  },
+  {
+    "id": 5,
+    "usuario_id": 1,
+    "tipo": "comentario_post",
+    "mensagem": "dandan comentou sua postagem de 19/11/2025 22:09: \"fut top ho...\"",
+    "dados": {
+      "post_id": 1,
+      "comentario_id": 2
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:30:13"
+  },
+  {
+    "id": 6,
+    "usuario_id": 2,
+    "tipo": "curtida_post",
+    "mensagem": "seninha curtiu sua postagem de 19/11/2025 22:33: \"Testando p...\"",
+    "dados": {
+      "post_id": 2,
+      "usuario_id": 1
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:33:25"
+  },
+  {
+    "id": 7,
+    "usuario_id": 2,
+    "tipo": "comentario_post",
+    "mensagem": "seninha comentou sua postagem de 19/11/2025 22:33: \"Testando postagem se...\"",
+    "dados": {
+      "post_id": 2,
+      "comentario_id": 3
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:34:00"
+  },
+  {
+    "id": 8,
+    "usuario_id": 1,
+    "tipo": "novo_seguidor",
+    "mensagem": "dani2 começou a seguir você!",
+    "dados": {
+      "seguidor_id": 3
+    },
+    "lida": false,
+    "data_criacao": "2025-11-19 22:35:09"
+  },
+  {
+    "id": 9,
+    "usuario_id": 2,
+    "tipo": "novo_seguidor",
+    "mensagem": "dani2 começou a seguir você!",
+    "dados": {
+      "seguidor_id": 3
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:35:11"
+  },
+  {
+    "id": 10,
+    "usuario_id": 2,
+    "tipo": "curtida_post",
+    "mensagem": "dani2 curtiu sua postagem de 19/11/2025 22:33: \"Testando p...\"",
+    "dados": {
+      "post_id": 2,
+      "usuario_id": 3
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:35:20"
+  },
+  {
+    "id": 11,
+    "usuario_id": 2,
+    "tipo": "comentario_post",
+    "mensagem": "dani2 comentou sua postagem de 19/11/2025 22:33: \"Testando postagem se...\"",
+    "dados": {
+      "post_id": 2,
+      "comentario_id": 4
+    },
+    "lida": true,
+    "data_criacao": "2025-11-19 22:35:32"
+  },
+  {
+    "id": 12,
+    "usuario_id": 1,
+    "tipo": "curtida_post",
+    "mensagem": "dani2 curtiu sua postagem de 19/11/2025 22:09: \"fut top ho...\"",
+    "dados": {
+      "post_id": 1,
+      "usuario_id": 3
+    },
+    "lida": false,
+    "data_criacao": "2025-11-19 22:35:38"
   }
 ]

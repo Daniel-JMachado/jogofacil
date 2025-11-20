@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "seguidor_id": 2,
+    "seguido_id": 1,
+    "data_inicio": "2025-11-19 22:10:43"
+  },
+  {
+    "id": 2,
+    "seguidor_id": 1,
+    "seguido_id": 2,
+    "data_inicio": "2025-11-19 22:13:42"
+  },
+  {
+    "id": 3,
+    "seguidor_id": 2,
+    "seguido_id": 3,
+    "data_inicio": "2025-11-19 22:14:19"
+  },
+  {
+    "id": 4,
+    "seguidor_id": 1,
+    "seguido_id": 3,
+    "data_inicio": "2025-11-19 22:18:46"
+  },
+  {
+    "id": 5,
+    "seguidor_id": 3,
+    "seguido_id": 1,
+    "data_inicio": "2025-11-19 22:35:09"
+  },
+  {
+    "id": 6,
+    "seguidor_id": 3,
+    "seguido_id": 2,
+    "data_inicio": "2025-11-19 22:35:11"
+  }
+]
